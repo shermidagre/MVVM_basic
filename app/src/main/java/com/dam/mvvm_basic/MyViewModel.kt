@@ -2,9 +2,8 @@ package com.dam.mvvm_basic
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class MyViewModel(): ViewModel() {
 
@@ -51,16 +50,16 @@ class MyViewModel(): ViewModel() {
      */
     fun comprobar(ordinal: Int): Boolean {
 
-        Log.d(TAG_LOG, "comprobamos - Estado: ${estadoLiveData.value}")
+        Log.d(TAG_LOG, "comprobamos - Estado: ${estadoActual.value}")
         return if (ordinal == Datos.numero) {
             Log.d(TAG_LOG, "es correcto")
-            estadoLiveData.value = Estados.INICIO
-            Log.d(TAG_LOG, "GANAMOS - Estado: ${estadoLiveData.value}")
+            estadoActual.value = Estados.INICIO
+            Log.d(TAG_LOG, "GANAMOS - Estado: ${estadoActual.value}")
             true
         } else {
             Log.d(TAG_LOG, "no es correcto")
-            estadoLiveData.value = Estados.ADIVINANDO
-            Log.d(TAG_LOG, "otro intento - Estado: ${estadoLiveData.value}")
+            estadoActual.value = Estados.ADIVINANDO
+            Log.d(TAG_LOG, "otro intento - Estado: ${estadoActual.value}")
             false
         }
     }
