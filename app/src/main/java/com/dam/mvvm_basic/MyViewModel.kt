@@ -12,9 +12,9 @@ class MyViewModel(): ViewModel() {
     private val TAG_LOG = "miDebug"
 
     // estados del juego
-    // usamos LiveData para que la IU se actualice
+    // usamos StateFlow para que la IU se actualice
     // patron de diseño observer
-    val estadoLiveData: MutableLiveData<Estados> = MutableLiveData(Estados.INICIO)
+    val estadoActual: MutableStateFlow<Estados> = MutableStateFlow(Estados.INICIO)
 
     // este va a ser nuestra lista para la secuencia random
     // usamos mutable, ya que la queremos modificar
@@ -23,7 +23,7 @@ class MyViewModel(): ViewModel() {
     // inicializamos variables cuando instanciamos
     init {
         // estado inicial
-        Log.d(TAG_LOG, "Inicializamos ViewModel - Estado: ${estadoLiveData.value}")
+        Log.d(TAG_LOG, "Inicializamos ViewModel - Estado: ${estadoActual.value}")
     }
 
     /**
@@ -31,17 +31,17 @@ class MyViewModel(): ViewModel() {
      */
     fun crearRandom() {
         // cambiamos estado, por lo tanto la IU se actualiza
-        estadoLiveData.value = Estados.GENERANDO
+        estadoActual.value = Estados.GENERANDO
         _numbers.value = (0..3).random()
-        Log.d(TAG_LOG, "creamos random ${_numbers.value} - Estado: ${estadoLiveData.value}")
+        Log.d(TAG_LOG, "creamos random ${_numbers.value} - Estado: ${estadoActual.value}")
         actualizarNumero(_numbers.value)
     }
 
     fun actualizarNumero(numero: Int) {
-        Log.d(TAG_LOG, "actualizamos numero en Datos - Estado: ${estadoLiveData.value}")
+        Log.d(TAG_LOG, "actualizamos numero en Datos - Estado: ${estadoActual.value}")
         Datos.numero = numero
         // cambiamos estado, por lo tanto la IU se actualiza
-        estadoLiveData.value = Estados.ADIVINANDO
+        estadoActual.value = Estados.ADIVINANDO
     }
 
     /**

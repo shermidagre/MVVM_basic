@@ -36,6 +36,10 @@ fun IU(miViewModel: MyViewModel) {
     // para que sea mas facil la etiqueta del log
     val TAG_LOG: String = "miDebug"
 
+    // variable para el estado del boton
+    var estadoActual = miViewModel.estadoActual.collectState()
+
+
     // botones en horizontal
     Column(
         modifier= Modifier.fillMaxWidth().fillMaxHeight().padding(20.dp),
@@ -45,47 +49,40 @@ fun IU(miViewModel: MyViewModel) {
         Column {
             Row {
                 // creo un boton rojo
-                Boton(miViewModel, Colores.CLASE_ROJO)
+                Boton(miViewModel, Colores.CLASE_ROJO, estadoActual)
 
                 // creo un boton verde
-                Boton(miViewModel, Colores.CLASE_VERDE)
+                Boton(miViewModel, Colores.CLASE_VERDE, estadoActual)
             }
             Row {
                 // creo un boton azul
-                Boton(miViewModel, Colores.CLASE_AZUL)
+                Boton(miViewModel, Colores.CLASE_AZUL, estadoActual)
 
                 // creo un boton amarillo
-                Boton(miViewModel, Colores.CLASE_AMARILLO)
+                Boton(miViewModel, Colores.CLASE_AMARILLO, estadoActual)
             }
         }
         // creao boton Start
-        Boton_Start(miViewModel, Colores.CLASE_START)
+        Boton_Start(miViewModel, Colores.CLASE_START, estadoActual)
     }
 }
 
 @Composable
-fun Boton(miViewModel: MyViewModel, enum_color: Colores) {
+fun Boton(miViewModel: MyViewModel, enum_color: Colores, estadoActual: Estados) {
 
     // para que sea mas facil la etiqueta del log
     val TAG_LOG: String = "miDebug"
-
-    // variable para el estado del boton
-    var _activo by remember { mutableStateOf(miViewModel.estadoLiveData.value!!.boton_activo) }
-
-    miViewModel.estadoLiveData.observe(LocalLifecycleOwner.current) {
-        // Log.d(TAG_LOG, "Oserver Estado: ${miViewModel.estadoLiveData.value!!.name}")
-        _activo = miViewModel.estadoLiveData.value!!.boton_activo
-    }
 
     // separador entre botones
     Spacer(modifier = Modifier.size(10.dp))
 
     Button(
-        enabled = _activo,
+        enabled = estadoActual.boton_activo,
         // utilizamos el color del enum
         colors =  ButtonDefaults.buttonColors(enum_color.color),
         onClick = {
             Log.d(TAG_LOG, "Dentro del boton: ${enum_color.ordinal}")
+            Log.d(TAG_LOG, "Dentro del boton - Estado: ${estadoActual.ordinal}")
             miViewModel.comprobar(enum_color.ordinal)
                   },
         modifier = Modifier
@@ -97,19 +94,13 @@ fun Boton(miViewModel: MyViewModel, enum_color: Colores) {
 }
 
 @Composable
-fun Boton_Start(miViewModel: MyViewModel, enum_color: Colores) {
+fun Boton_Start(miViewModel: MyViewModel, enum_color: Colores, estadoActual: Estados) {
 
     // para que sea mas facil la etiqueta del log
     val TAG_LOG: String = "miDebug"
 
     // variable para el estado del boton
-    var _activo by remember { mutableStateOf(miViewModel.estadoLiveData.value!!.start_activo) }
-
-
-    miViewModel.estadoLiveData.observe(LocalLifecycleOwner.current) {
-        // Log.d(TAG_LOG, "Oserver Estado: ${miViewModel.estadoLiveData.value!!.name}")
-        _activo = miViewModel.estadoLiveData.value!!.start_activo
-    }
+    var _activo = estadoActual.start_activo
 
     // separador entre botones
     Spacer(modifier = Modifier.size(40.dp))
@@ -118,7 +109,7 @@ fun Boton_Start(miViewModel: MyViewModel, enum_color: Colores) {
         // utilizamos el color del enum
         colors =  ButtonDefaults.buttonColors(enum_color.color),
         onClick = {
-            Log.d(TAG_LOG, "Dentro del Start - Estado: ${miViewModel.estadoLiveData.value!!.name}")
+            Log.d(TAG_LOG, "Dentro del Start - Estado: ${estadoActual.ordinal}")
             miViewModel.crearRandom()
         },
         modifier = Modifier
