@@ -1,3 +1,5 @@
+# Samuel Hermida Gregores
+
 ## Introducción
 
 El objetivo de esta app es describir las diferentes clases y como se interrelacionan para el [modelo MVVM](https://developer.android.com/topic/libraries/architecture/viewmodel?hl=es-419)
