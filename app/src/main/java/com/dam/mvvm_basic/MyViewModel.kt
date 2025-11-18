@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class MyViewModel(): ViewModel() {
@@ -28,6 +29,11 @@ class MyViewModel(): ViewModel() {
         Log.d(TAG_LOG, "Inicializamos ViewModel - Estado: ${estadoLiveData.value}")
     }
 
+    // contador para la barra de progreso
+    var contador = MutableStateFlow<Int>(0)
+
+
+
     /**
      * crear entero random
      */
@@ -38,6 +44,21 @@ class MyViewModel(): ViewModel() {
         Log.d(TAG_LOG, "creamos random ${_numbers.value} - Estado: ${estadoLiveData.value}")
         actualizarNumero(_numbers.value)
     }
+    fun crearRandom2() {
+        // cambiamos estado, por lo tanto la IU se actualiza
+        estadoLiveData.value = Estados.CARGANDO
+        _numbers.value = (0..100).random()
+        Log.d(TAG_LOG, "creamos random ${_numbers.value} - Estado: ${estadoLiveData.value}")
+        actualizarNumero2(_numbers.value)
+        if (_numbers.value == 100) {
+            estadoLiveData.value = Estados.FINALIZANDO
+        }
+        else {
+            estadoLiveData.value = Estados.GENERANDO
+        }
+        simularDescarga()
+
+    }
 
     fun actualizarNumero(numero: Int) {
         Log.d(TAG_LOG, "actualizamos numero en Datos - Estado: ${estadoLiveData.value}")
@@ -45,6 +66,15 @@ class MyViewModel(): ViewModel() {
         // cambiamos estado, por lo tanto la IU se actualiza
         estadoLiveData.value = Estados.ADIVINANDO
     }
+
+    fun actualizarNumero2(numero: Int) {
+        Log.d(TAG_LOG, "actualizamos numero en Datos - Estado: ${estadoLiveData.value}")
+        Datos.numero = numero
+        estadoLiveData.value = Estados.ADIVINANDO
+        estadoLiveData.value = Estados.FINALIZANDO
+    }
+
+
 
     /**
      * comprobar si el boton pulsado es el correcto
@@ -87,6 +117,29 @@ class MyViewModel(): ViewModel() {
             estadoAux = EstadosAuxiliares.AUX3
             Log.d(TAG_LOG, "estado (corutina): ${estadoAux}")
             delay(1500)
+        }
+    }
+    fun simularDescarga() {
+        viewModelScope.launch {
+
+            while (contador.value < 100) {
+                if (_numbers.value <= 20) {
+                    delay(20)
+                    contador.value += 1
+                } else if (_numbers.value <= 40) {
+                    delay(100)
+                    contador.value += 1
+                } else if (_numbers.value <= 60) {
+                    delay(300)
+                    contador.value += 1
+                } else if (_numbers.value <= 80) {
+                    delay(500)
+                    contador.value += 1
+                } else if (_numbers.value <= 100) {
+                    delay(800)
+                    contador.value += 1
+                }
+            }
         }
     }
 }
