@@ -50,7 +50,7 @@ class MyViewModel(): ViewModel() {
         _numbers.value = (0..100).random()
         Log.d(TAG_LOG, "creamos random ${_numbers.value} - Estado: ${estadoLiveData.value}")
         actualizarNumero2(_numbers.value)
-        if (_numbers.value == 100) {
+        if (_numbers.value >= 100) {
             estadoLiveData.value = Estados.FINALIZANDO
         }
         else {
@@ -127,18 +127,22 @@ class MyViewModel(): ViewModel() {
                     delay(20)
                     contador.value += 1
                 } else if (_numbers.value <= 40) {
-                    delay(100)
+                    delay(40)
                     contador.value += 1
                 } else if (_numbers.value <= 60) {
-                    delay(300)
+                    delay(60)
                     contador.value += 1
                 } else if (_numbers.value <= 80) {
-                    delay(500)
+                    delay(80)
                     contador.value += 1
-                } else if (_numbers.value <= 100) {
-                    delay(800)
+                } else if (_numbers.value < 100) {
+                    delay(100)
                     contador.value += 1
                 }
+                if (contador.value >= 100) {
+                    estadoLiveData.value = Estados.FINALIZANDO
+                }
+                Log.d(TAG_LOG, "iteraccion contador: ${contador.value}")
             }
         }
     }
