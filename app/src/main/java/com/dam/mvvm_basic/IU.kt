@@ -37,6 +37,8 @@ import kotlinx.coroutines.delay
 fun IU(miViewModel: MyViewModel) {
     val numeroGenerado by miViewModel._numbers
     val estado by miViewModel.estadoLiveData.observeAsState()
+    val estadoAvanzar by miViewModel.estadosBoton.observeAsState()
+
 
     Column(
         modifier = Modifier
@@ -48,6 +50,7 @@ fun IU(miViewModel: MyViewModel) {
     ) {
         Text(text = "Número generado: ${numeroGenerado}")
         Text(text = "Estado: ${estado?.name ?: "INICIO"}")
+        Text(text = "Estado Boton: ${estadoAvanzar?.name ?: "ESPERANDO "}")
         mostrarPorcentaje(miViewModel)
 
         Column {
@@ -78,6 +81,12 @@ fun IU(miViewModel: MyViewModel) {
                 miViewModel.crearRandom2()
             }
         )
+        BotonConEfecto(
+            enum_color = Colores.CLASE_AVANZAR,
+            activo = estado?.start_activo ?: true,
+            onClick = { estadoAvanzar!!.funcion }
+        )
+
     }
 }
 
@@ -147,6 +156,7 @@ fun mostrarPorcentaje(myViewModel: MyViewModel){
         fontSize = 20.sp,
     )
 }
+
 
 /**
  * Preview de la interfaz de usuario

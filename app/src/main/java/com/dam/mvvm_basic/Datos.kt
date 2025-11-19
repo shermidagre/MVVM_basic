@@ -1,6 +1,8 @@
 package com.dam.mvvm_basic
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
+
 
 /**
  * Clase para almacenar los datos del juego
@@ -21,9 +23,8 @@ enum class Colores(val color: Color, val color_suave: Color = Color.Transparent,
     CLASE_AZUL(color = Color.Blue, txt = "azul"),
     CLASE_AMARILLO(color = Color.Yellow, txt = "melo"),
     CLASE_START(color = Color.Magenta, color_suave = Color.Red, txt = "Start"),
-
-    CLASE_DESCARGAR(color = Color.Magenta, color_suave = Color.Red, txt = "Descargar")
-
+    CLASE_DESCARGAR(color = Color.Magenta, color_suave = Color.Red, txt = "Descargar"),
+    CLASE_AVANZAR(color = Color.Magenta, color_suave = Color.Red, txt = "Avanzar")
 }
 
 /**
@@ -40,6 +41,11 @@ enum class Estados(val start_activo: Boolean, val boton_activo: Boolean) {
     ADIVINANDO(start_activo = false, boton_activo = true),
     CARGANDO(start_activo = false, boton_activo = false),
     FINALIZANDO(start_activo = false, boton_activo = false)
+}
+enum class EstadosBotonAvanzar(val start_activo: Boolean, val boton_activo: Boolean, val funcion:()->Unit) {
+    E1(start_activo = true, boton_activo = true, {}),
+    E2(start_activo = false, boton_activo = true,{}),
+    E3(start_activo = false, boton_activo = true,{}),
 }
 
 /**

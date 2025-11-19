@@ -19,6 +19,10 @@ class MyViewModel(): ViewModel() {
     // patron de diseño observer
     val estadoLiveData: MutableLiveData<Estados?> = MutableLiveData(Estados.INICIO)
 
+    val estadosBoton: MutableLiveData<EstadosBotonAvanzar?> =
+        MutableLiveData(EstadosBotonAvanzar.E1)
+
+
     // este va a ser nuestra lista para la secuencia random
     // usamos mutable, ya que la queremos modificar
     var _numbers = mutableStateOf(0)
@@ -73,6 +77,40 @@ class MyViewModel(): ViewModel() {
         estadoLiveData.value = Estados.ADIVINANDO
         estadoLiveData.value = Estados.FINALIZANDO
     }
+
+    private fun crearTextoE1() {
+        Log.d(TAG_LOG, "Estado E1: crear texto")
+    }
+
+    private fun cuentaAtrasE2() {
+        Log.d(TAG_LOG, "Estado en E2: cuenta atrás")
+    }
+
+    private fun sonidoE3() {
+        Log.d(TAG_LOG, "Estado en E3: sonido")
+    }
+
+    fun avanzarEstadoBotonAvanzar() {
+        val estadoActual = estadosBoton.value
+
+        when (estadoActual) {
+            EstadosBotonAvanzar.E1 -> crearTextoE1()
+            EstadosBotonAvanzar.E2 -> cuentaAtrasE2()
+            EstadosBotonAvanzar.E3 -> sonidoE3()
+            else -> {}
+        }
+
+        val siguienteEstado = when (estadoActual) {
+            EstadosBotonAvanzar.E1 -> EstadosBotonAvanzar.E2
+            EstadosBotonAvanzar.E2 -> EstadosBotonAvanzar.E3
+            EstadosBotonAvanzar.E3 -> EstadosBotonAvanzar.E1
+            else -> null
+        }
+
+        estadosBoton.value = siguienteEstado
+        Log.d(TAG_LOG, "Boton Avanzar - Estado Actualizado: ${siguienteEstado}")
+    }
+
 
 
 
